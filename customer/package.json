@@ -2,10 +2,16 @@
   "name": "customer",
   "version": "1.0.0",
   "description": "Customer microservice",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=prod nodemon ./src/index.js",
+    "dev": "NODE_ENV=dev nodemon ./src/index.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "ujjwal",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "nodemon": "^3.1.0"
+  }
 }
