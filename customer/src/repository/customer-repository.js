@@ -21,7 +21,35 @@ class CustomerRepository{
           throw err
         }
       }
-
+      async FindCustomer({ email }) {
+        try {
+            await dbclient.connect();
+           const result = await dbclient.query(`select * from "${SCHEMA}".customer where email = $1`,[email]);
+           if(result)
+           {
+                return result.rows[0];
+           }
+        } catch (err) {
+            throw err;
+        }
+      }
+      async CreateAddress({ idCustomer, street, postalCode, city, country }) {
+        try {
+            await dbclient.connect();
+          const profile = await dbclient.query(`select * from "${SCHEMA}".customer where "idCustomer" =$1`,[idCustomer]);
+    
+          if (profile) {
+            const result =await dbclient.query(`INSERT INTO "${SCHEMA}".address ("customerId",street, "postalCode", city, country ) values($1,$2,$3,$4,$5) RETURNING "idAddress"`,[idCustomer,street, postalCode, city,country]);
+            if(result){
+                return result.rows[0].idAddress;
+            }
+          }
+          await dbclient.end();
+        } catch (err) {
+          throw err;
+        }
+      }
 }
+
 
 module.exports = CustomerRepository;
