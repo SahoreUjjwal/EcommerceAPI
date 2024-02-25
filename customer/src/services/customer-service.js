@@ -1,4 +1,4 @@
-const CustomerRepository = require("../repository/customer-repository")
+const CustomerRepository = require("../database/repository/customer-repository")
 const { FormateData, GeneratePassword, GenerateSalt, GenerateSignature,ValidatePassword} = require('../utils');
 
 class CustomerService{

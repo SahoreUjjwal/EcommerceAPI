@@ -1,5 +1,5 @@
-const {dbclient} = require("../database/index");
-const {SCHEMA}=require('../config/index');
+const {dbclient} = require("../index");
+const {SCHEMA}=require('../../config/index');
 class CustomerRepository{
     
     async CreateCustomer({ email, password, phone, salt }) {
