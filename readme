@@ -1,1 +1,6 @@
+const shopping = require("./shopping/src/api/shopping")
+
 npm install -g win-node-env //for windows
+
+Code contains 3 microservices customer , product,shopping
+

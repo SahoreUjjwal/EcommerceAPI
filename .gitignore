@@ -2,3 +2,4 @@ node_modules
 product/node_modules
 customer/node_modules
 shopping/node_modules
+gateway/node_modules
