@@ -2,5 +2,11 @@ const shopping = require("./shopping/src/api/shopping")
 
 npm install -g win-node-env //for windows
 
-Code contains 3 microservices customer , product,shopping
+Code contains 3 microservices customer , product,shopping and one gateway.Code
+
+Install dependencies in each microservice and gateway using "npm i".
+
+Each microservice and the gateway is needed to be run separately using command "npm run dev".
+
+
 
