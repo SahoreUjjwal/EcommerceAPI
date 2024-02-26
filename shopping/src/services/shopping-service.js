@@ -32,25 +32,15 @@ class ShoppingService {
       throw err;
     }
   }
-  async SubscribeEvents(payload){
- 
-    const { event, data } =  payload;
-
-    const { userId, product, qty } = data;
-
-    switch(event){
-        
-        case 'ADD_TO_CART':
-            this.ManageCart(userId,product, qty, false);
-            break;
-        case 'REMOVE_FROM_CART':
-            this.ManageCart(userId,product,qty, true);
-            break;
-        default:
-            break;
-    }
-
-}
+  async DeleteItem(customerId,productId)
+  {
+    try{
+        const cartResult = await this.repository.DeleteCartItem(customerId,productId);
+        return FormateData(cartResult);
+      }catch(err){
+        throw err;
+      }
+  }
 async GetPrroductPayload(userId,order,event){
   
   if(order){
@@ -64,8 +54,21 @@ async GetPrroductPayload(userId,order,event){
       return FormateData({error:"No Order is awailable"})
   }
 }
-
+async PlaceOrder(customerId){
+  
+    try{
+        const response = await this.repository.CreateNewOrder(customerId);
+        console.log(response);
+        return response;
+    }
+    catch(err){
+        throw err;
+    }
 }
+  
+  }
+
+
 
 
 

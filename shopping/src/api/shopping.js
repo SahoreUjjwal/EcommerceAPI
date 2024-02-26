@@ -1,4 +1,4 @@
-const { dbclient } = require("../database");
+
 const ShoppingService = require("../services/shopping-service");
 
 const UserAuth = require('./middlewares/auth');
@@ -6,33 +6,25 @@ const UserAuth = require('./middlewares/auth');
 module.exports = (app) => {
     
     const service = new ShoppingService();
-
-
     app.post('/order',UserAuth, async (req,res,next) => {
 
-        const { _id } = req.user;
-        const { txnNumber } = req.body;
-
-
+        const { idCustomer } = req.user;
+      
         try {
-            const { data } = await service.PlaceOrder({_id, txnNumber});
-            const payload = await service.GetPrroductPayload(_id,data,'CREATE_ORDER');
-            PublishCustomerEvents(payload);
-
+            const  data  = await service.PlaceOrder({idCustomer});
             return res.status(200).json(data);
-            
+  
         } catch (err) {
-            next(err)
+            return res.status(500).json({message:"Unable to place order"});
         }
-
     });
 
     app.get('/orders',UserAuth, async (req,res,next) => {
 
-        const { id } = req.user;
+        const { idCustomer } = req.user;
 
         try {
-            const { data } = await service.GetOrders(_id);
+            const { data } = await service.GetOrders(idCustomer);
             return res.status(200).json(data);
         } catch (err) {
             next(err);
@@ -43,12 +35,12 @@ module.exports = (app) => {
     
     app.get('/cart', UserAuth, async (req,res,next) => {
 
-        const { _id } = req.user;
+        const { idCustomer } = req.user;
         try {
-            const { data } = await service.getCart(_id);
-            return res.status(200).json(data.cart);
+            const { data } = await service.getCart(idCustomer);
+            return res.status(200).json(data);
         } catch (err) {
-            next(err);
+            res.status(500).json({message:err});
         }
     });
 
@@ -69,19 +61,14 @@ module.exports = (app) => {
     
     app.delete('/cart/:id',UserAuth, async (req,res,next) => {
 
-        const { _id } = req.user;
+        const { idCustomer } = req.user;
         const productId = req.params.id;
         try {
-            const {data} = await service.GetPrroductPayload(_id,{productId },'REMOVE_FROM_CART');
-            PublishCustomerEvents(data);
-            PublishShoppingEvents(data);
-            const response ={
-                product:data.data.product,
-                unit:data.data.qty
-               }
-            return res.status(200).json(response);
+            const {data} = await service.DeleteItem(idCustomer,productId);
+
+            return res.status(200).json(data);
         } catch (err) {
-            next(err)
+            return res.status(500).json({message:"Unable to delete"})
         }
     });
 }
